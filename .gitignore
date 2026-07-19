@@ -1,16 +1,20 @@
 .DS_Store
 
-# Frontend dependencies and build output
+# Expo dependencies and build output
 node_modules/
+.expo/
 dist/
+web-build/
 coverage/
+expo-env.d.ts
+*.tsbuildinfo
 
 # Local configuration and credentials
 .env
 .env.*
 !.env.example
 
-# Capacitor native projects are generated in CI or locally
+# Expo CNG native projects are generated in CI or locally
 /android/
 /ios/
 .gradle-home/

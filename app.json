@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "心潮",
+    "slug": "xinchao",
+    "version": "0.8.0",
+    "orientation": "portrait",
+    "scheme": "xinchao",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.xinchao.psycho",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.xinchao.psycho",
+      "predictiveBackGestureEnabled": true
+    },
+    "web": {
+      "output": "static",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "允许心潮选择你主动提供的图片线索。图片不会因选择而自动上传。",
+          "cameraPermission": "允许心潮拍摄你主动提供的图片线索。"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F4EFE5",
+          "dark": {
+            "backgroundColor": "#101A18"
+          }
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "允许心潮使用麦克风记录你主动说下的内容；原始录音不会保存。"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

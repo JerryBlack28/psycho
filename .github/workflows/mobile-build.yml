@@ -1,4 +1,4 @@
-name: Build mobile apps
+name: Build Expo mobile apps
 
 on:
   workflow_dispatch:
@@ -9,11 +9,14 @@ on:
 permissions:
   contents: read
 
+env:
+  CI: true
+
 jobs:
   android:
     name: Android debug APK
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Check out repository
@@ -29,25 +32,16 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 17
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android SDK packages
-        run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;35.0.0"
-
       - name: Install JavaScript dependencies
         run: npm ci
 
-      - name: Build web application
-        run: npm run ionic:build
-
-      - name: Generate Android project
-        run: npx cap add android
-
-      - name: Sync Capacitor plugins
-        run: npx cap sync android
+      - name: Generate Android project with Expo CNG
+        run: npx expo prebuild --platform android --clean --no-install
 
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
@@ -69,7 +63,7 @@ jobs:
   ios:
     name: iOS Simulator app
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - name: Check out repository
@@ -84,32 +78,32 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm ci
 
-      - name: Build web application
-        run: npm run ionic:build
+      - name: Generate iOS project with Expo CNG
+        run: npx expo prebuild --platform ios --clean --no-install
 
-      - name: Generate iOS project
-        run: npx cap add ios
-
-      - name: Sync Capacitor plugins
-        run: npx cap sync ios
+      - name: Install CocoaPods dependencies
+        run: npx pod-install ios
 
       - name: Build iOS Simulator app
-        run: >-
-          xcodebuild
-          -project ios/App/App.xcodeproj
-          -scheme App
-          -configuration Debug
-          -sdk iphonesimulator
-          -destination "generic/platform=iOS Simulator"
-          -derivedDataPath ios/DerivedData
-          CODE_SIGNING_ALLOWED=NO
-          build
+        run: |
+          WORKSPACE=$(find ios -maxdepth 1 -name '*.xcworkspace' -print -quit)
+          SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          test -n "$WORKSPACE"
+          xcodebuild \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            -derivedDataPath ios/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            build
 
       - name: Package iOS Simulator app
-        run: >-
-          ditto -c -k --sequesterRsrc --keepParent
-          ios/DerivedData/Build/Products/Debug-iphonesimulator/App.app
-          xinchao-ios-simulator.zip
+        run: |
+          APP_PATH=$(find ios/DerivedData/Build/Products/Debug-iphonesimulator -maxdepth 1 -name '*.app' -print -quit)
+          test -n "$APP_PATH"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" xinchao-ios-simulator.zip
 
       - name: Upload iOS Simulator app
         uses: actions/upload-artifact@v4
