@@ -2722,24 +2722,15 @@ function resetQuickNoteComposer() {
   closeQuickNoteComposer()
 }
 
-function setQuickNoteAttachmentInputsEnabled(enabled) {
-  const inputIds = ["quick-note-photo-input", "quick-note-camera-input"]
-  inputIds.forEach((id) => {
-    byId(id).disabled = !enabled
-  })
-}
-
 function openQuickNoteComposer() {
   const menu = byId("quick-note-attachment-menu")
   const button = byId("quick-note-add-attachment")
-  setQuickNoteAttachmentInputsEnabled(true)
   menu.hidden = false
   button.setAttribute("aria-expanded", "true")
   button.classList.add("is-open")
 }
 
 function closeQuickNoteComposer() {
-  setQuickNoteAttachmentInputsEnabled(false)
   byId("quick-note-attachment-menu").hidden = true
   byId("quick-note-add-attachment").setAttribute("aria-expanded", "false")
   byId("quick-note-add-attachment").classList.remove("is-open")

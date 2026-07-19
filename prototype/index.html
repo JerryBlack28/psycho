@@ -521,16 +521,16 @@
               <div class="quick-note-attachment-control">
                 <button class="quick-note-plus-button" id="quick-note-add-attachment" type="button" aria-label="添加图片" aria-expanded="false" aria-controls="quick-note-attachment-menu">＋</button>
                 <div class="quick-note-attachment-menu" id="quick-note-attachment-menu" hidden>
-                  <label for="quick-note-photo-input">
+                  <label class="quick-note-media-picker" id="quick-note-photo-picker">
+                    <input id="quick-note-photo-input" type="file" accept="image/*" />
                     <span aria-hidden="true">▧</span><div><strong>图片</strong><small>从相册选择</small></div>
                   </label>
-                  <label for="quick-note-camera-input">
+                  <label class="quick-note-media-picker" id="quick-note-camera-picker">
+                    <input id="quick-note-camera-input" type="file" accept="image/*" capture="environment" />
                     <span aria-hidden="true">◎</span><div><strong>随手拍</strong><small>拍下此刻</small></div>
                   </label>
                 </div>
               </div>
-              <input class="sr-only" id="quick-note-photo-input" type="file" accept="image/*" disabled />
-              <input class="sr-only" id="quick-note-camera-input" type="file" accept="image/*" capture="environment" disabled />
               <label class="sr-only" for="quick-note-input">此刻想记下什么？</label>
               <textarea id="quick-note-input" maxlength="200" rows="1" placeholder="留下一点此刻的想法……"></textarea>
               <button class="quick-note-voice-button" id="quick-note-voice" type="button" aria-label="开始实时语音转写闪念" aria-pressed="false">
